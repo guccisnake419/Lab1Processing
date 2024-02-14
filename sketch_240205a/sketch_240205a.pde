@@ -1,0 +1,141 @@
+import processing.serial.*;
+Serial myPort;
+import org.gicentre.utils.stat.*;
+import gifAnimation.*;
+import lord_of_galaxy.timing_utils.*;
+import g4p_controls.GButton;
+import g4p_controls.*;
+import java.util.*; 
+
+Gif myAnimation;
+
+boolean send = false;
+String msg = "";
+String tab= "intro";
+int age= 21;
+int max_heart_rate= 220- age;
+float resting_heartrate= 0;
+PImage img;
+PImage img2;
+PImage img3;
+PImage img4;
+Stopwatch fitnesstimer;
+Stopwatch relaxedtimer;
+Stopwatch stressedtimer;
+
+ArrayList<Stopwatch> zones;
+GButton timer_button;
+GButton endf_button;
+GButton start_relaxed;
+GButton end_relaxed;
+GButton start_stressed;
+GButton end_stressed;
+String BaselineCaller;
+Map<String, Integer> hm 
+            = new HashMap<String, Integer>();
+void setup(){
+  size(500, 500);
+  background(255);
+  img = loadImage("IMG_0576.PNG");
+  img2= loadImage("stressed.png");
+  img3 = loadImage("stressed1.png");
+  img4 = loadImage("relaxed22.png");
+  String portName = Serial.list()[2];
+  myPort = new Serial(this, portName, 115200);
+  myPort.bufferUntil('\n');
+  myAnimation = new Gif(this, "bepatient.gif");  
+  myAnimation.play();
+  fitness_setup();
+  fitnesstimer = new Stopwatch(this);
+  relaxedtimer= new Stopwatch(new PApplet());
+  stressedtimer= new Stopwatch(new PApplet());
+  zones= new ArrayList();
+  for(int i= 0; i< 5; i++){
+    Stopwatch temp = new Stopwatch(new PApplet());
+    zones.add(temp);
+  }
+   //mainWindow = GWindow.getWindow(this, "Main Window", 100, 100, 300, 200,JAVA2D);
+  timer_button =new  GButton(this, 50, 700, 100, 20, "TIMER");
+  endf_button =new  GButton(this, 50, 700, 100, 20, "END SESSION");
+  start_relaxed =new  GButton(this, 50, 700, 100, 40, "RELAXED TIMER");
+  end_relaxed =new  GButton(this, 50, 700, 100, 40, "END RELAXED TEST");
+  start_stressed =new  GButton(this, 50, 700, 100, 40, "STRESSED TIMER");
+  end_stressed =new  GButton(this, 50, 700, 100, 40, "END STRESSED TEST");
+  timer_button.fireAllEvents(true);
+    hm.put("MAXIMUM", new Integer(0)); 
+        hm.put("HARD", new Integer(1)); 
+        hm.put("MODERATE", new Integer(2)); 
+        hm.put("LIGHT", new Integer(3));
+        hm.put("VERY LIGHT", new Integer(4));
+  
+  
+}
+void draw(){
+  
+  if (tab=="intro")
+    intro_draw();
+  else if (tab == "Baseline"){
+      baseline_draw();
+  }
+  else if (tab == "Fitness"){
+    if(baseline_array.size()<30){
+      tab= "Baseline";
+      BaselineCaller= "Fitness";
+      baseline_draw();
+    }
+    else{
+      fitness_draw();
+    }
+    
+    
+  }
+  else if (tab == "Relaxed_Stressed"){
+    if(baseline_array.size()<30){
+      tab= "Baseline";
+      BaselineCaller= "Relaxed_Stressed";
+      baseline_draw();
+    }
+     else relaxed_draw();
+  }
+   
+  else if(tab=="endFitness")
+    endFitness_draw();
+   
+  
+  
+}
+
+
+void serialEvent(Serial myPort){
+  String tempval = myPort.readStringUntil('\n');
+  tempval = tempval.trim();
+  println(tempval);
+  
+  String[] res=  tempval.split("[,]", 0);
+  if (res.length==4){
+   int[] sol = new int[4];
+   for (int i = 0; i< 4; i++){
+     
+     sol[i] = Integer.valueOf(res[i]);
+     
+   }
+   if (tab=="Baseline"){
+       //print("Adding to baseline");
+       baseline_array.add(sol);
+     }
+    if (tab== "Fitness" && !fitnesstimer.isPaused()){
+      blood_oxylvl= sol[2];
+      conf= sol[1];
+      graph_serialEvent((float)sol[0]);
+      
+    }
+   if (tab== "Relaxed_Stressed" &&  (!relaxedtimer.isPaused() ||!stressedtimer.isPaused() )){
+     
+     graph_serialEvent2((float)sol[0]);
+   }
+  }
+   //<>// //<>// //<>// //<>//
+   
+   
+  
+}
