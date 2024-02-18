@@ -1,5 +1,5 @@
 float current_heartrate = 0;
-String current_heartzone= "NIL";
+String current_heartzone= "MODERATE";
 int blood_oxylvl= 0;
 int conf= 0;
 int timer_state= 0;
@@ -42,26 +42,30 @@ void fitness_setup() {
 }
 void fitness_draw(){
   pushStyle();
-  background(255);
+  setZoneBackgroundColor(current_heartzone);
   fill(0);
   textSize(30);
-  text("FITNESS MODE", 125, 25);
+  textAlign(CENTER);
+  text("FITNESS MODE", width/2, 25);
   String s= "Resting heart rate: "+ String.valueOf(int(resting_heartrate));
   String t= "Resting heart zone: "+ Heartrate_zone;
   
-  text (s, 10, 50);
-  text (t, 10, 75);
+  text (s, width/2, 60);
+  text (t, width/2, 85);
+  
   lineChart.draw(25, 100,width-60 , 200);
   String u= "Current heart rate: "+ String.valueOf(int (current_heartrate));
   String v= "Current heart zone: "+ current_heartzone;
   String w= "Blood oxygen level: "+ String.valueOf(blood_oxylvl);
   String x= "Confidence: "+ String.valueOf(conf);
-  text(u, 10, 350);
-  text(v, 10, 375);
-  text(w, 10, 400);
-  text(x, 10, 425);
-  timer_button.moveTo(10, 455);
-  endf_button.moveTo(300, 455);
+  
+  text(u, width/2, 350);
+  text(v, width/2, 375);
+  text(w, width/2, 400);
+  text(x, width/2, 425);
+  
+  timer_button.moveTo(width/10, 455);
+  endf_button.moveTo(width - 150, 455);
   start_relaxed.moveTo(10, 900);
   end_relaxed.moveTo(400, 900);
   start_stressed.moveTo(10, 900);
@@ -70,12 +74,13 @@ void fitness_draw(){
     handletimers(hm.get(current_heartzone));
   }
   else if(fitnesstimer.isPaused())handletimers2();
-
+    
    text(fitnesstimer.hour() + ":" + nf(fitnesstimer.minute(), 2) + ":" +
-   nf(fitnesstimer.second(), 2) + ":" + nf(fitnesstimer.millis(), 3), 200, 455);
+   nf(fitnesstimer.second(), 2) + ":" + nf(fitnesstimer.millis(), 3), width/2, 470);
+    //<>//
   popStyle();
 }
- //<>// //<>// //<>//
+ //<>// //<>//
 void handletimers(Integer i){
   if (i != null){
     for (int j= 0; j< 5; j++){
@@ -95,4 +100,27 @@ void handletimers2(){
     
   }
   
+}
+
+void setZoneBackgroundColor(String zone) {
+  switch (zone) {
+    case "MAXIMUM":
+      background(255, 0, 0); // Red background for maximum zone
+      break;
+    case "HARD":
+      background(255, 165, 0); // Orange background for hard zone
+      break;
+    case "MODERATE":
+      background(255, 255, 0); // Yellow background for moderate zone
+      break;
+    case "LIGHT":
+      background(0, 255, 0); // Green background for light zone
+      break;
+    case "VERY LIGHT":
+      background(135, 206, 250); // Light blue background for very light zone
+      break;
+    default:
+      background(255); // Default background color
+      break;
+  }
 }
