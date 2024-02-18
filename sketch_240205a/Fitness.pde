@@ -7,6 +7,9 @@ void fitness_setup() {
   lineChart = new XYChart(this);
   lineChartX = new FloatList();
   lineChartY = new FloatList();
+  
+  //lineChart.setXAxisLabel("Interval");
+  //lineChart.setYAxisLabel("Heartrate");
   lineChart.setData(lineChartX.array(), lineChartY.array());
   
   lineChart.showXAxis(true);
@@ -19,11 +22,11 @@ void fitness_setup() {
   lineChart.setPointColour(color(180, 50, 100, 100));
   lineChart.setPointSize(5);
   lineChart.setLineWidth(2);
-  //lineChart.setXAxisLabel("X Axis Label");
-  //lineChart.setYAxisLabel("Y Axis Label");
+  
   
   count = 0;
-  
+  //lineChart2.setXAxisLabel("Interval");
+  //lineChart2.setYAxisLabel("Heartrate");
   lineChart2 = new XYChart(this);
   lineChartX2 = new FloatList();
   lineChartY2 = new FloatList();
@@ -37,14 +40,14 @@ void fitness_setup() {
   lineChart2.setXFormat("0");
   
   lineChart2.setPointColour(color(180, 50, 100, 100));
-  lineChart2.setPointSize(5);
+  lineChart2.setPointSize(2);
   lineChart2.setLineWidth(2);
   
   count2 = 0;
 }
 void fitness_draw(){
   pushStyle();
-  setZoneBackgroundColor(current_heartzone);
+  background(255);
   fill(0);
   textSize(30);
   textAlign(CENTER);
@@ -54,8 +57,10 @@ void fitness_draw(){
   
   text (s, width/2, 60);
   text (t, width/2, 85);
-  
+  lineChart.setLineColour(getColor(current_heartzone));
   lineChart.draw(25, 100,width-60 , 200);
+  
+  lineChart.updateLayout();
   String u= "Current heart rate: "+ String.valueOf(int (current_heartrate));
   String v= "Current heart zone: "+ current_heartzone;
   String w= "Blood oxygen level: "+ String.valueOf(blood_oxylvl);
@@ -108,25 +113,29 @@ void handletimers2(){
   
 }
 
-void setZoneBackgroundColor(String zone) {
+color getColor(String zone) {
+  color col;
   switch (zone) {
     case "MAXIMUM":
-      background(255, 0, 0); // Red background for maximum zone
+      col= color(255, 0, 0); // Red background for maximum zone
       break;
     case "HARD":
-      background(255, 165, 0); // Orange background for hard zone
+      col= color(255, 165, 0); // Orange background for hard zone
       break;
     case "MODERATE":
-      background(255, 255, 0); // Yellow background for moderate zone
+      col= color(255, 255, 0); // Yellow background for moderate zone
       break;
     case "LIGHT":
-      background(0, 255, 0); // Green background for light zone
+      col= color(0, 255, 0); // Green background for light zone
       break;
     case "VERY LIGHT":
-      background(135, 206, 250); // Light blue background for very light zone
+      col= color(135, 206, 250); // Light blue background for very light zone
       break;
     default:
-      background(255); // Default background color
+      col= color(255); // Default background color
       break;
+    
+   
   }
+   return col;
 }

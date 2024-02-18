@@ -30,7 +30,7 @@ void intro_draw(){
 
   textAlign(CENTER);
   String u= "Current heart rate: "+ String.valueOf(int (current_heartrate2));
-  String v= "Time since last beat: "+String.valueOf(difference)+"ms" ;
+  String v= "Time between beats: "+String.valueOf(difference)+"ms" ;
   String w= "Blood oxygen level: "+ String.valueOf(blood_oxylvl2);
   String x= "Confidence: "+ String.valueOf(conf2);
   

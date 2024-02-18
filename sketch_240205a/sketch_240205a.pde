@@ -144,6 +144,7 @@ void serialEvent(Serial myPort){
       blood_oxylvl= sol[2];
       conf= sol[1];
       graph_serialEvent((float)sol[0]);
+      //delay(1000);
       //graph_serialEvent((float)140);//for testing
       
       
