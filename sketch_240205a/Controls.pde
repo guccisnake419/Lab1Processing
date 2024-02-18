@@ -1,3 +1,4 @@
+int buzzer = 12;
 void keyPressed(){
   switch (key){
     case 'b':
@@ -79,5 +80,6 @@ public void handleButtonEvents(GButton button, GEvent event) {
 void handle_endrelaxed(String str){
   float decrease= ((resting_heartrate- relaxed_heartrate)*100/resting_heartrate );
   if (str == "relaxed")message= "You are "+ decrease+"% more relaxed";
-  else if  (str == "stressed") message= "You are "+ decrease+"% less relaxed";
+  else if  (str == "stressed") {message= "You are "+ decrease+"% less relaxed";
+  myPort.write('1');}
 }
