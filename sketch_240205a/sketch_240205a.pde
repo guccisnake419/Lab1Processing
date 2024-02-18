@@ -22,7 +22,9 @@ PImage img4;
 Stopwatch fitnesstimer;
 Stopwatch relaxedtimer;
 Stopwatch stressedtimer;
-
+color[] colors;
+int currentColorIndex = 0; 
+int lastColorChangeTime; 
 ArrayList<Stopwatch> zones;
 GButton timer_button;
 GButton endf_button;
@@ -62,13 +64,19 @@ void setup(){
   start_stressed =new  GButton(this, 50, 700, 100, 40, "STRESSED TIMER");
   end_stressed =new  GButton(this, 50, 700, 100, 40, "END STRESSED TEST");
   timer_button.fireAllEvents(true);
-    hm.put("MAXIMUM", new Integer(0)); 
-        hm.put("HARD", new Integer(1)); 
-        hm.put("MODERATE", new Integer(2)); 
-        hm.put("LIGHT", new Integer(3));
-        hm.put("VERY LIGHT", new Integer(4));
+  hm.put("MAXIMUM", 0); 
+  hm.put("HARD", 1); 
+  hm.put("MODERATE", 2); 
+  hm.put("LIGHT", 3);
+  hm.put("VERY LIGHT", 4);
   
-  
+  colors = new color[5];
+  colors[0] = color(255, 150, 150);   // Lighter Red
+  colors[1] = color(150, 255, 150);   // Lighter Green
+  colors[2] = color(150, 150, 255);   // Lighter Blue
+  colors[3] = color(255, 255, 150); // Lighter Yellow
+  colors[4] = color(150, 255, 255); // Lighter Cyan
+  lastColorChangeTime = millis();
 }
 void draw(){
   
@@ -120,6 +128,14 @@ void serialEvent(Serial myPort){
      sol[i] = Integer.valueOf(res[i]);
      
    }
+   if (tab== "intro"){
+     current_heartrate2 = sol[0];
+     difference= millis()- starttime;
+     starttime= millis();
+    blood_oxylvl2= sol[2];
+    conf2= sol[1];
+     
+   }
    if (tab=="Baseline"){
        //print("Adding to baseline");
        baseline_array.add(sol);
@@ -128,6 +144,8 @@ void serialEvent(Serial myPort){
       blood_oxylvl= sol[2];
       conf= sol[1];
       graph_serialEvent((float)sol[0]);
+      //graph_serialEvent((float)140);//for testing
+      
       
     }
    if (tab== "Relaxed_Stressed" &&  (!relaxedtimer.isPaused() ||!stressedtimer.isPaused() )){

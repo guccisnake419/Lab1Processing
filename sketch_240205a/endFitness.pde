@@ -40,8 +40,10 @@ void endFitness_draw(){
   text(x, width/2, 210);
   text(y, width/2, 250);
   textSize(18);
-  text("Press 'F' for Fitness Mode", width/2, 300);
-  text("Press 'R' for Relaxed/Stressed Mode", width/2, 350);
-  text ("Press 'I' for instructions", width/2, 400);
+  text("Press 'F' for Fitness Mode", width/2, 425);
+  text("Press 'R' for Relaxed/Stressed Mode", width/2, 450);
+  text ("Press 'H' for Home ", width/2, 475);
+  timer_button.moveTo(10, 900);
+  endf_button.moveTo(300, 900);
   popStyle();
 }

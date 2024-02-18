@@ -1,5 +1,5 @@
 float current_heartrate = 0;
-String current_heartzone= "MODERATE";
+String current_heartzone= "";
 int blood_oxylvl= 0;
 int conf= 0;
 int timer_state= 0;
@@ -19,6 +19,8 @@ void fitness_setup() {
   lineChart.setPointColour(color(180, 50, 100, 100));
   lineChart.setPointSize(5);
   lineChart.setLineWidth(2);
+  //lineChart.setXAxisLabel("X Axis Label");
+  //lineChart.setYAxisLabel("Y Axis Label");
   
   count = 0;
   
@@ -71,25 +73,29 @@ void fitness_draw(){
   start_stressed.moveTo(10, 900);
   end_stressed.moveTo(400, 900);
   if (!fitnesstimer.isPaused()){
-    handletimers(hm.get(current_heartzone));
+    Integer temp = hm.get(current_heartzone);
+    if (temp != null) handletimers(temp);
   }
   else if(fitnesstimer.isPaused())handletimers2();
     
    text(fitnesstimer.hour() + ":" + nf(fitnesstimer.minute(), 2) + ":" +
    nf(fitnesstimer.second(), 2) + ":" + nf(fitnesstimer.millis(), 3), width/2, 470);
-    //<>//
+   
   popStyle();
 }
- //<>// //<>//
+ //<>//
 void handletimers(Integer i){
   if (i != null){
     for (int j= 0; j< 5; j++){
-      if(j==i){
-        zones.get(i).start();
-      }
-      else if (!zones.get(i).isPaused())
-        zones.get(i).pause();
-    }
+      if(j!=i){
+          if (!zones.get(j).isPaused()) zones.get(j).pause();
+        
+        
+      }   
+      
+    } //<>//
+    if (zones.get(i).isPaused())
+    zones.get(i).start();
   }
   
 }

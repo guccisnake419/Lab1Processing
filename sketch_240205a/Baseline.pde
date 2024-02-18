@@ -2,9 +2,22 @@ int percentage_done= 0;
 String Heartrate_zone= "NILL";
 ArrayList<int[]> baseline_array = new ArrayList<int[]>();
 void baseline_draw(){
+  if (millis() - lastColorChangeTime > 2000) {
+    // Change the background color to the next color in the array
+    background(colors[currentColorIndex]);
+    
+    // Increment the current color index, and wrap around if needed
+    currentColorIndex = (currentColorIndex + 1) % colors.length;
+    
+    // Update lastColorChangeTime to the current time
+    lastColorChangeTime = millis();
+  }
+  else{
+     background(colors[currentColorIndex]);
+  }
   if(baseline_array.size()<=30){
     pushStyle();
-    background(255);
+    
     fill(0);
     textSize(30);
     text("CALCULATING BASELINE...", 80, 25);

@@ -10,6 +10,9 @@ void keyPressed(){
      case 'r':
        tab= "Relaxed_Stressed";
        break;
+      case 'h':
+       tab= "intro";
+       break;
       
   }
   
@@ -30,13 +33,14 @@ public void handleButtonEvents(GButton button, GEvent event) {
     
   }
   else if (button == endf_button && event == GEvent.CLICKED){
-    tab= "endFitness";
+    
     if (!fitnesstimer.isPaused()){
        fitnesstimer.pause();
     }
      
 
-    handletimers2();
+    handletimers2(); //<>//
+    tab= "endFitness"; //<>//
   }
    else if (button == start_relaxed && event == GEvent.CLICKED){
      if (relaxed_state==1)
@@ -65,6 +69,7 @@ public void handleButtonEvents(GButton button, GEvent event) {
      
      if (stressed_state==1){
        stressedtimer.start();
+       myPort.write('1');
      }
      else{
        stressedtimer.pause();
@@ -80,6 +85,6 @@ public void handleButtonEvents(GButton button, GEvent event) {
 void handle_endrelaxed(String str){
   float decrease= ((resting_heartrate- relaxed_heartrate)*100/resting_heartrate );
   if (str == "relaxed")message= "You are "+ decrease+"% more relaxed";
-  else if  (str == "stressed") {message= "You are "+ decrease+"% less relaxed";
+  else if  (str == "stressed") {message= "You are "+ decrease+"% less stressed";
   myPort.write('1');}
 }
